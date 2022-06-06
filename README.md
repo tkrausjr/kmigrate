@@ -23,7 +23,7 @@ To leverage kMigrate you will need the following.
 
 To deploy the sample workload into the Source Cluster:
 
-    $ cd kMigrate
+    $ cd kmigrate
     $ kubectl config use-context prod-small
     $ kubectl apply -f sample/lucky13.yaml
 
