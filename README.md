@@ -50,7 +50,7 @@ You should two PODs, a service of type LB (If you used the lucky13-lb-svc.yaml) 
 
 Run the kMigrate.py script
 
-    $ ./kMigrate.py
+    $ ./kmigrate.py
     
 1. Select the Source Cluster to find your PODs to backup and Hit Enter.
 2. Select one of the lucky13 PODs in the Source Cluster and Hit Enter.
