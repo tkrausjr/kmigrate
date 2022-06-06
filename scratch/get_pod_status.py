@@ -19,7 +19,7 @@ if not contexts:
 contexts = [context['name'] for context in contexts]
 active_index = contexts.index(active_context['name'])
 
-# PICK to select SOURCE Cluster for KMOTION
+# PICK to select SOURCE Cluster for kMigrate
 cluster1, first_index = pick(contexts, title="Pick the Cluster to look at . . .",
                              default_index=active_index)
 client1 = client.CoreV1Api(

@@ -19,18 +19,18 @@ def main():
     contexts = [context['name'] for context in contexts]
     active_index = contexts.index(active_context['name'])
 
-    # PICK to select SOURCE Cluster for KMOTION
-    cluster1, first_index = pick(contexts, title="Pick the source Cluster Context for the POD to kmotioned",
+    # PICK to select SOURCE Cluster for kMigrate
+    cluster1, first_index = pick(contexts, title="Pick the source Cluster Context for the POD to kmigrateed",
                                  default_index=active_index)
     client1 = client.CoreV1Api(
         api_client=config.new_client_from_config(context=cluster1))
 
     # Create Python List of all PODs in SRC Namespace for PICK Module
     source_pods = [i.metadata.name for i in client1.list_pod_for_all_namespaces().items]
-    selected_pod = pick(source_pods, title="Pick the POD to be kMotioned")
+    selected_pod = pick(source_pods, title="Pick the POD to be kMigrateed")
 
-    # PICK to select Destination Cluster for KMOTION
-    cluster2, _ = pick(contexts, title="Pick the target Cluster Context for the POD to be kMotioned to",
+    # PICK to select Destination Cluster for kMigrate
+    cluster2, _ = pick(contexts, title="Pick the target Cluster Context for the POD to be kMigrateed to",
                        default_index=first_index)
     client2 = client.CoreV1Api(
         api_client=config.new_client_from_config(context=cluster2))
@@ -69,7 +69,7 @@ def main():
         if (output.find(backup_name) != -1):
             print("\n|-|-|-|-|-| Velero backup ", backup_name, " exists on Recovery Cluster ", cluster2, ". Moving to next step.")
             break
-    print('\n|-|-|-|-|-| kMotioning POD {0} from {1} cluster to {2} cluster... \n'.format(source_pod_object.metadata.name,cluster1,cluster2))
+    print('\n|-|-|-|-|-| kMigrateing POD {0} from {1} cluster to {2} cluster... \n'.format(source_pod_object.metadata.name,cluster1,cluster2))
 
     # VELERO Backup Restore
     restore_create_cmd = ['velero', 'restore', 'create', backup_name, '--from-backup', backup_name, '-w','--kubecontext',cluster2]
@@ -82,15 +82,15 @@ def main():
                                           namespace=source_pod_object.metadata.namespace)
 
         if pod.status.phase == 'Running':
-            print("\n|-|-|-|-|-| kMotioned POD", pod.metadata.name, " is Running on Recovery Cluster ", cluster1)
+            print("\n|-|-|-|-|-| kMigrateed POD", pod.metadata.name, " is Running on Recovery Cluster ", cluster1)
             break
         else:
             print('Waiting for POD {0} status to be Running. \nCurrent status is {1}'.format(pod.metadata.name, pod.status.phase))
             time.sleep(3)
 
     end_time = time.time()
-    print('|-|-|-|-|-| kMotion complete for POD {0} !!!!'.format(source_pod_object.metadata.name))
-    print('|-|-|-|-|-| kMotion time was {0} Seconds.'.format(end_time-start_time))
+    print('|-|-|-|-|-| kMigrate complete for POD {0} !!!!'.format(source_pod_object.metadata.name))
+    print('|-|-|-|-|-| kMigrate time was {0} Seconds.'.format(end_time-start_time))
     print('|-|-|-|-|-| Cleaning up temporary backup on SRC Cluster\n')
 
     # VELERO BACKUP Delete from Source Context
