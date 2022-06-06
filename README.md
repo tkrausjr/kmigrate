@@ -1,5 +1,5 @@
 # kmotion
-kmotion is a wrapper script that uses the kubernetes python client and velero under the covers to very quickly migrate an entire kubernetes application (including Services, Deployments, PODs) from one Kubernetes cluster to another.
+kmigrate is a wrapper script that uses the kubernetes python client and velero under the covers to very quickly migrate an entire kubernetes application (including Services, Deployments, PODs) from one Kubernetes cluster to another.
 
 ## Prerequisites
 To leverage kmotion you will need the following.
