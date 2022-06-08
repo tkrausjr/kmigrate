@@ -3,13 +3,17 @@ kmigrate is a wrapper script that uses the kubernetes python client and velero u
 
 ## Prerequisites
 To leverage kMigrate you will need the following.
-1. Python3 Installed
-2. Velero CLI installed and Velero installed in both SRC and DST Kubernetes clusters. https://heptio.github.io/velero/master/install-overview
-3. Velero configured to use a shared S3 bucket as indicated https://heptio.github.io/velero/master/migration-case.html
-4. A local kubeconfig file with two clusters configured and access to those two clusters on the same machine you will run kMigrate on.
+1. Python3 Installed with Kubernetes Client and pick Modules installed.
+2. Kubernetes Client Python module installed.
+3. pick Python module installed.
+4. Velero CLI installed and Velero installed in both SRC and DST Kubernetes clusters. https://heptio.github.io/velero/master/install-overview
+5. Velero configured to use a shared S3 bucket as indicated https://heptio.github.io/velero/master/migration-case.html
+6. A local kubeconfig file with two clusters configured and access to those two clusters on the same machine you will run kMigrate on.
 
 ## Example verlero installation with Shared S3 to be run on both clusters.
     
+    $ pip install kubernetes
+    $ pip install pick
     $ kubectl config get-contexts
     INSTALL Velero to the SRC cluster (prod-small)
     $ kubectl config use-context prod-small
