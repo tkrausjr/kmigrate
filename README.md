@@ -13,7 +13,14 @@ To leverage kMigrate you will need the following.
     $ pip install pick
 
 ## Prepare S3 Bucket (Can also use Minio)
-
+    Use Amazon S3 Console to create a storage bucket
+    Validate you can access storage bucket from your Linux machine
+    $ aws configure
+    $ aws s3 ls
+        2019-12-05 08:40:40 cf-templates-cppvrc58u29n-us-east-1
+        2020-05-31 03:55:46 com.vmware.cso.cm.659204632508-tf
+        2022-06-07 22:55:13 tk-velero
+    
 ## Install Velero CLI
     $ wget https://github.com/vmware-tanzu/velero/releases/download/v1.8.1/velero-v1.8.1-linux-amd64.tar.gz
     $ tar -xvzf velero-v1.8.1-linux-amd64.tar.gz
@@ -21,15 +28,32 @@ To leverage kMigrate you will need the following.
     $ velero version
 
 ## Install Velero to both clusters with S3 as Storage Provider
+    Create velero S3 Credentials file
+    $ vi aws-creds-velero
+        [default]
+        AWS_ACCESS_KEY_ID=AS....NKUQ
+        AWS_SECRET_ACCESS_KEY=39....Ah
     $ kubectl config get-contexts
     INSTALL Velero to the SRC cluster (prod-small)
     $ kubectl config use-context prod-small
-    $ velero install --provider aws --bucket lucky13 --secret-file ~/velero-creds --backup-location-config region=minio,s3ForcePathStyle="true",s3Url=http://10.197.96.13:9000 --use-volume-snapshots=false --use-restic
+    $ velero install --provider aws --bucket tk-velero --secret-file ~/aws-creds-velero --backup-location-config region=us-east-1,s3ForcePathStyle="true",s3Url=http://tk-velero.s3.us-east-1.amazonaws.com --use-volume-snapshots=false --use-restic
     $ kubectl config use-context prod-med
     INSTALL Velero to the SRC cluster (prod-med)
     $ velero install --provider aws --bucket lucky13 --secret-file ~/velero-creds --backup-location-config region=minio,s3ForcePathStyle="true",s3Url=http://10.197.96.13:9000 --use-volume-snapshots=false --use-restic
 
-
+## Install Velero to both clusters with Minio as Storage Provider
+    Create velero S3 Credentials file
+    $ vi minio-creds-velero
+        [default]
+        AWS_ACCESS_KEY_ID=AS....NKUQ
+        AWS_SECRET_ACCESS_KEY=39....Ah
+    $ kubectl config get-contexts
+    INSTALL Velero to the SRC cluster (prod-small)
+    $ kubectl config use-context prod-small
+    $ velero install --provider aws --bucket tk-velero --secret-file ~/aws-creds-velero --backup-location-config region=us-east-1,s3ForcePathStyle="true",s3Url=http://10.197.96.13:9000 --use-volume-snapshots=false --use-restic
+    $ kubectl config use-context prod-med
+    INSTALL Velero to the SRC cluster (prod-med)
+    $ velero install --provider aws --bucket lucky13 --secret-file ~/velero-creds --backup-location-config region=minio,s3ForcePathStyle="true",s3Url=http://10.197.96.13:9000 --use-volume-snapshots=false --use-restic
 ## Deploy a test Application with Service to migrate to a new cluster.
 
 To deploy the sample workload into the Source Cluster:
